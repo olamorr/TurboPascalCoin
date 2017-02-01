@@ -33,16 +33,16 @@ type
 Const
   CT_Genesis_Magic_String_For_Old_Block_Hash :
     AnsiString =
-    '(c) Albert Molina - Genesis block at same time than BitCoin Block 424720 Hash 000000000000000001cc41ff7846264718ef0a15f97f532a98277bd5f6820b89';
+    'Bitcoin Surges Across Latin America with Start of Trump Era - 20170201 - Interest in Bitcoin is surging in Latin America in a new era marked by strained relations with the US President Donald Trump.';
 
   CT_Zero_Block_Proof_of_work_in_Hexa =
-    {$IFDEF PRODUCTION}'00000003A29C32E84A539ADE24397D41D30116A6FAFEC17B7D9CED68A4238C92'{$ELSE}{$IFDEF TESTNET}''{$ELSE}{$ENDIF}{$ENDIF};
+    {$IFDEF PRODUCTION}'00000023ADB1BF4BF24C4787B1F901E3A149EC6534879BF758F786BAAFE3BDC5'{$ELSE}{$IFDEF TESTNET}''{$ELSE}{$ENDIF}{$ENDIF};
 
 
-  CT_NetServer_Port = {$IFDEF PRODUCTION}4004{$ELSE}{$IFDEF TESTNET}4104{$ELSE}{$ENDIF}{$ENDIF};
-  CT_JSONRPCMinerServer_Port = {$IFDEF PRODUCTION}4009{$ELSE}{$IFDEF TESTNET}4109{$ELSE}{$ENDIF}{$ENDIF};
-  CT_JSONRPC_Port = {$IFDEF PRODUCTION}4003{$ELSE}{$IFDEF TESTNET}4103{$ELSE}{$ENDIF}{$ENDIF};
-  CT_AccountsPerBlock = 5;
+  CT_NetServer_Port = {$IFDEF PRODUCTION}14004{$ELSE}{$IFDEF TESTNET}4104{$ELSE}{$ENDIF}{$ENDIF};
+  CT_JSONRPCMinerServer_Port = {$IFDEF PRODUCTION}14009{$ELSE}{$IFDEF TESTNET}4109{$ELSE}{$ENDIF}{$ENDIF};
+  CT_JSONRPC_Port = {$IFDEF PRODUCTION}14003{$ELSE}{$IFDEF TESTNET}4103{$ELSE}{$ENDIF}{$ENDIF};
+  CT_AccountsPerBlock = 25;
 
   CT_NewLineSecondsAvg: Cardinal = {$IFDEF PRODUCTION}300{$ELSE}{$IFDEF TESTNET}30{$ELSE}{$ENDIF}{$ENDIF};
     // 60*5=300 seconds -> 5 minutes avg
@@ -50,8 +50,8 @@ Const
     //   Each year = 105120 new blocks (aprox)
     //   -> *5 accounts per block = 525600 new accounts each year (aprox)
 
-  CT_FirstReward: UInt64 = 1000000; // 4 decimals... First reward = 100,0000
-  CT_MinReward: UInt64 = 10000; // 4 decimals... Min reward = 1,0000
+  CT_FirstReward: UInt64 = 10000000; // 4 decimals... First reward = 1000,0000
+  CT_MinReward: UInt64 = 100000; // 4 decimals... Min reward = 1,0000
   CT_NewLineRewardDecrease: Cardinal = 420480; // Avg 4 year
 
   CT_WaitNewBlocksBeforeTransaction = 100;
@@ -83,7 +83,7 @@ Const
   CT_BlockChain_Protocol_Version: Word = $0001; // Version 1
   CT_BlockChain_Protocol_Available: Word = $0001; // Build 1.4 Protocol available changed 0->1
 
-  CT_MagicNetIdentification = $0A043580; // Unix timestamp 168048000 ... It's Albert birthdate!
+  CT_MagicNetIdentification = $e9a40c12;
 
   // Build 1.0.4 - introducing NetProtocol versioning:
   CT_NetProtocol_Version: Word = $0003;
@@ -93,7 +93,7 @@ Const
 
   CT_SafeBoxBankVersion : Word = 2;
 
-  CT_MagicIdentificator: AnsiString = 'PascalCoin'; //
+  CT_MagicIdentificator: AnsiString = 'TurboPascalCoin'; //
 
   // Value of Operations type in Protocol 1
   CT_Op_Transaction = $01;
@@ -102,7 +102,7 @@ Const
 
   CT_ClientAppVersion : AnsiString = {$IFDEF PRODUCTION}'1.4.2'{$ELSE}{$IFDEF TESTNET}'TESTNET'{$ELSE}{$ENDIF}{$ENDIF};
 
-  CT_Discover_IPs =  'bpascal1.dynamic-dns.net;bpascal2.dynamic-dns.net;pascalcoin2.ddns.net;pascalcoin1.dynamic-dns.net;pascalcoin1.dns1.us';
+  CT_Discover_IPs =  'mtl.turbopascalcoin.info:20605;de.turbopascalcoin.info:7805';
 
   CT_TRUE_FALSE : Array[Boolean] Of AnsiString = ('FALSE','TRUE');
 

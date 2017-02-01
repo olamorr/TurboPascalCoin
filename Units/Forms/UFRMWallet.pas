@@ -5,11 +5,12 @@ unit UFRMWallet;
 {$ENDIF}
 
 { Copyright (c) 2016 by Albert Molina
+  Copyright (c) 2016 by Olamorr
 
   Distributed under the MIT software license, see the accompanying file LICENSE
   or visit http://www.opensource.org/licenses/mit-license.php.
 
-  This unit is a part of Pascal Coin, a P2P crypto currency without need of
+  This unit is a part of TurboPascal Coin, a P2P crypto currency without need of
   historical operations.
 
   If you like it, consider a donation using BitCoin:
@@ -185,6 +186,7 @@ type
     procedure cbExploreMyAccountsClick(Sender: TObject);
     procedure MiCloseClick(Sender: TObject);
     procedure MiDecodePayloadClick(Sender: TObject);
+    procedure TrayIconClick(Sender: TObject);
     procedure TrayIconDblClick(Sender: TObject);
     procedure ApplicationEventsMinimize(Sender: TObject);
     procedure bbSendAMessageClick(Sender: TObject);
@@ -324,7 +326,7 @@ begin
       FWalletKeys.WalletFileName := TFolderHelper.GetPascalCoinDataFolder+PathDelim+'WalletKeys.dat';
     Except
       On E:Exception do begin
-        E.Message := 'Cannot open your wallet... Perhaps another instance of Pascal Coin is active!'+#10+#10+E.Message;
+        E.Message := 'Cannot open your wallet... Perhaps another instance of TurboPascal Coin is active!'+#10+#10+E.Message;
         Raise;
       end;
     End;
@@ -863,7 +865,7 @@ begin
   TrayIcon.Hint := Self.Caption;
   TrayIcon.BalloonTitle := 'Restoring the window.';
   TrayIcon.BalloonHint :=
-    'Double click the system tray icon to restore Pascal Coin';
+    'Double click the system tray icon to restore TurboPascal Coin';
   TrayIcon.BalloonFlags := bfInfo;
   MinersBlocksFound := 0;
   lblBuild.Caption := 'Build: '+CT_ClientAppVersion;
@@ -1046,6 +1048,11 @@ begin
   end else if PageControl.ActivePage=tsMyAccounts then begin
     FOperationsAccountGrid.ShowModalDecoder(FWalletKeys,FAppParams);
   end;
+end;
+
+procedure TFRMWallet.TrayIconClick(Sender: TObject);
+begin
+
 end;
 
 procedure TFRMWallet.MiFindaccountClick(Sender: TObject);

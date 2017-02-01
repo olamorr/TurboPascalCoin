@@ -9,7 +9,7 @@ unit UFolderHelper;
   Distributed under the MIT software license, see the accompanying file LICENSE
   or visit http://www.opensource.org/licenses/mit-license.php.
 
-  This unit is a part of Pascal Coin, a P2P crypto currency without need of
+  This unit is a part of TurboPascal Coin, a P2P crypto currency without need of
   historical operations.
 
   If you like it, consider a donation using BitCoin:
@@ -101,9 +101,9 @@ end;
 class function TFolderHelper.GetPascalCoinDataFolder: string;
 begin
   {$IFDEF TESTNET}
-  Result := GetAppDataFolder+PathDelim+'PascalCoin_TESTNET';
+  Result := GetAppDataFolder+PathDelim+'TurboPascalCoin_TESTNET';
   {$ELSE}
-  Result := GetAppDataFolder+PathDelim+'PascalCoin';
+  Result := GetAppDataFolder+PathDelim+'TurboPascalCoin';
   {$ENDIF}
 end;
 

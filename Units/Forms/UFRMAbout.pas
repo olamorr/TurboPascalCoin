@@ -35,6 +35,7 @@ type
   TFRMAbout = class(TForm)
     Image1: TImage;
     Label1: TLabel;
+    Label5: TLabel;
     Memo1: TMemo;
     bbClose: TBitBtn;
     lblBuild: TLabel;
@@ -42,8 +43,8 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    Label5: TLabel;
     procedure FormCreate(Sender: TObject);
+    procedure Image1Click(Sender: TObject);
     procedure Label4Click(Sender: TObject);
     procedure Label5Click(Sender: TObject);
   private
@@ -81,6 +82,11 @@ begin
   {$ENDIF}
   lblProtocolVersion.Caption := Format('BlockChain Protocol: %d (%d)  -  Net Protocol: %d (%d)',[CT_BlockChain_Protocol_Version,CT_BlockChain_Protocol_Available,
     CT_NetProtocol_Version, CT_NetProtocol_Available]);
+end;
+
+procedure TFRMAbout.Image1Click(Sender: TObject);
+begin
+
 end;
 
 procedure TFRMAbout.Label4Click(Sender: TObject);
