@@ -1,6 +1,7 @@
-# Pascal Coin: P2P Cryptocurrency without need of historical operations.  
+# TurboPascal Coin: P2P Cryptocurrency without need of historical operations.  
   
 Copyright (c) 2016 Albert Molina  
+Copyright (c) 2017 Olamorr
   
 THIS IS EXPERIMENTAL SOFTWARE. Use it for educational purposes only.  
   
@@ -15,24 +16,36 @@ Grinyuk (https://github.com/Arvur/OpenSSL-Delphi), and some
 cryptographic functions inspirated in code written by Ladar Levison and   
 Marco Ferrante.  
 Original source code is written in Pascal Language and is available at   
-https://github.com/PascalCoin/PascalCoin  
+https://github.com/olamorr/TurboPascalCoin  
   
   
 ## HOW TO COMPILE:  
   
-See instructions at GitHub Wiki: https://github.com/PascalCoin/PascalCoin/wiki
+Use Lazarus 1.6 for linux. Delphi 7 for windows.
+
+Open project and build all.
   
   
-Enjoy Pascal Coin!
+Enjoy TurboPascal Coin!
   
 ## Donations  
   
 If you like it, consider a donation using BitCoin:
-16K3HCZRhFUtM8GdWRcfKeaa6KsuyxZaYk
+Original dev: 16K3HCZRhFUtM8GdWRcfKeaa6KsuyxZaYk
+TurboPascal dev: 14i7enJUUr3Zcw172PpRHzJEj3ZbJt2pmJ
 
-Also, consider a donation at PascalCoin development account: "0-10"
+Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 ## History:  
+
+### Build 1.4.2.0 - 2017-02-01
+
+- Changed emission to account for low decimal places
+- Changed account emission, now we have 5 times more accounts so there's no begging of accounts
+- Added configuration option for Network port on the daemon
+
+
+## Upstream:
 
 ### Build 1.4.2.0 - 2017-01-23
 
