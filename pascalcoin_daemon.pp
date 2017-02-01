@@ -14,7 +14,7 @@ uses
 
 
 begin
-  Application.Title:='PascalCoin Daemon application';
+  Application.Title:='TurboPascalCoin Daemon application';
   RegisterDaemonClass(TPCDaemon);
   RegisterDaemonMapper(TPCDaemonMapper);
   TCrypto.InitCrypto;

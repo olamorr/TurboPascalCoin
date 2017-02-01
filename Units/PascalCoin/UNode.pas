@@ -53,10 +53,11 @@ Type
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
-    Class Function Node : TNode;
+    Class Function Node(netPort: integer) : TNode; overload;
+    Class Function Node() : TNode; overload;
     Class Procedure DecodeIpStringToNodeServerAddressArray(Const Ips : AnsiString; Var NodeServerAddressArray : TNodeServerAddressArray);
     Class Function EncodeNodeServerAddressArrayToIpString(Const NodeServerAddressArray : TNodeServerAddressArray) : AnsiString;
-    Constructor Create(AOwner : TComponent); override;
+    Constructor Create(AOwner : TComponent; netPort: integer);
     Destructor Destroy; override;
     Property Bank : TPCBank read FBank;
     Function NetServer : TNetServer;
@@ -328,14 +329,14 @@ begin
   TNetData.NetData.DiscoverServers;
 end;
 
-constructor TNode.Create(AOwner: TComponent);
+constructor TNode.Create(AOwner: TComponent; netPort: integer);
 begin
   FNodeLog := TLog.Create(Self);
   FNodeLog.ProcessGlobalLogs := false;
   RegisterOperationsClass;
   if Assigned(_Node) then raise Exception.Create('Duplicate nodes protection');
   TLog.NewLog(ltInfo,ClassName,'TNode.Create');
-  inherited;
+  inherited Create(AOwner);
   FDisabledsNewBlocksCount := 0;
   FLockNodeOperations := TCriticalSection.Create;
   FBank := TPCBank.Create(Self);
@@ -343,6 +344,7 @@ begin
   FBCBankNotify.Bank := FBank;
   FBCBankNotify.OnNewBlock := OnBankNewBlock;
   FNetServer := TNetServer.Create;
+  FNetServer.Port := netPort;
   FOperations := TPCOperationsComp.Create(Self);
   FOperations.bank := FBank;
   FNotifyList := TList.Create;
@@ -513,9 +515,15 @@ begin
   Result := FNetServer;
 end;
 
+class function TNode.Node(netPort: integer): TNode;
+begin
+  if not assigned(_Node) then _Node := TNode.Create(Nil, netPort);
+  Result := _Node;
+end;
+
 class function TNode.Node: TNode;
 begin
-  if not assigned(_Node) then _Node := TNode.Create(Nil);
+  if not assigned(_Node) then _Node := TNode.Create(Nil, CT_NetServer_Port);
   Result := _Node;
 end;
 

@@ -32,6 +32,7 @@ Const
   CT_INI_IDENT_MINER_B58_PUBLICKEY = 'RPC_SERVERMINER_B58_PUBKEY';
   CT_INI_IDENT_MINER_NAME = 'RPC_SERVERMINER_NAME';
   CT_INI_IDENT_MINER_MAX_CONNECTIONS = 'RPC_SERVERMINER_MAX_CONNECTIONS';
+  CT_INI_IDENT_NET_PORT = 'NETWORK_PORT';
 
 Type
   { TPCDaemonThread }
@@ -175,7 +176,7 @@ var
 
 begin
   FMInerServer := Nil;
-  TLog.NewLog(ltinfo,Classname,'START PascalCoin Server');
+  TLog.NewLog(ltinfo,Classname,'START TurboPascalCoin Server');
   try
     try
       FWalletKeys := TWalletKeysExt.Create(Nil);
@@ -189,7 +190,7 @@ begin
       TCrypto.InitCrypto;
       FWalletKeys.WalletFileName := TFolderHelper.GetPascalCoinDataFolder+PathDelim+'WalletKeys.dat';
       // Creating Node:
-      FNode := TNode.Node;
+      FNode := TNode.Node(FIniFile.ReadInteger(CT_INI_SECTION_GLOBAL,CT_INI_IDENT_NET_PORT,CT_NetServer_Port));
       // RPC Server
       InitRPCServer;
       Try
@@ -223,17 +224,17 @@ begin
       end;
     end;
   finally
-    TLog.NewLog(ltinfo,Classname,'EXIT PascalCoin Server');
+    TLog.NewLog(ltinfo,Classname,'EXIT TurboPascalCoin Server');
   end;
 end;
 
 constructor TPCDaemonThread.Create;
 begin
   inherited Create(True);
-  FIniFile := TIniFile.Create(ExtractFileDir(Application.ExeName)+PathDelim+'pascalcoin_daemon.ini');
+  FIniFile := TIniFile.Create(ExtractFileDir(Application.ExeName)+PathDelim+'turbopascalcoin_daemon.ini');
   If FIniFile.ReadBool(CT_INI_SECTION_GLOBAL,CT_INI_IDENT_SAVELOGS,true) then begin
     _FLog.SaveTypes:=CT_TLogTypes_ALL;
-    _FLog.FileName:=TFolderHelper.GetPascalCoinDataFolder+PathDelim+'pascalcoin_'+FormatDateTime('yyyymmddhhnn',Now)+'.log';
+    _FLog.FileName:=TFolderHelper.GetPascalCoinDataFolder+PathDelim+'turbopascalcoin_'+FormatDateTime('yyyymmddhhnn',Now)+'.log';
     FIniFile.WriteBool(CT_INI_SECTION_GLOBAL,CT_INI_IDENT_SAVELOGS,true);
   end else begin
     FIniFile.WriteBool(CT_INI_SECTION_GLOBAL,CT_INI_IDENT_SAVELOGS,false);
@@ -328,13 +329,13 @@ Var D : TDaemonDef;
 begin
   inherited DoOnCreate;
   WriteLn('');
-  WriteLn(formatDateTime('dd/mm/yyyy hh:nn:ss.zzz',now)+' Starting PascalCoin server');
+  WriteLn(formatDateTime('dd/mm/yyyy hh:nn:ss.zzz',now)+' Starting TurboPascalCoin server');
   FLog := TLog.Create(Nil);
   FLog.OnInThreadNewLog:=@OnPascalCoinInThreadLog;
   _FLog := FLog;
   D:=DaemonDefs.Add as TDaemonDef;
-  D.DisplayName:='Pascal Coin Daemon';
-  D.Name:='PascalCoinDaemon';
+  D.DisplayName:='TurboPascal Coin Daemon';
+  D.Name:='TruboPascalCoinDaemon';
   D.DaemonClassName:='TPCDaemon';
   D.WinBindings.ServiceType:=stWin32;
 end;
