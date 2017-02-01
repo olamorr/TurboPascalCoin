@@ -156,7 +156,11 @@ begin
       txt := copy(txt,1,FWindow32X2-FWindow32X1+1);
     end;
     if (nline<=(FWindow32Y2-FWindow32Y1)) then begin
+      {$IFDEF LINUX}
+      GotoXY(FWindow32X1,nline);
+      {$ELSE}
       GotoXY32(FWindow32X1,nline);
+      {$ENDIF}
       write(txt);
     end;
   finally

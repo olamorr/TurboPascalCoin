@@ -166,6 +166,9 @@ type
     dgBlockChainExplorer: TDrawGrid;
     dgOperationsExplorer: TDrawGrid;
     MiFindOperationbyOpHash: TMenuItem;
+    procedure dgBlockChainExplorerBeforeSelection(Sender: TObject; aCol,
+      aRow: Integer);
+    procedure dgBlockChainExplorerDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TimerUpdateStatusTimer(Sender: TObject);
@@ -870,6 +873,19 @@ begin
   MinersBlocksFound := 0;
   lblBuild.Caption := 'Build: '+CT_ClientAppVersion;
   FPoolMiningServer := Nil;
+end;
+
+procedure TFRMWallet.dgBlockChainExplorerDblClick(Sender: TObject);
+begin
+  if dgBlockChainExplorer.SelectedRangeCount = 1 then begin
+    ShowMessage(IntToStr(dgBlockChainExplorer.Row) + ' - ' + TCrypto.ToHexaString(FBlockChainGrid.getRow(dgBlockChainExplorer.Row - 1).PoW));
+  end;
+end;
+
+procedure TFRMWallet.dgBlockChainExplorerBeforeSelection(Sender: TObject; aCol,
+  aRow: Integer);
+begin
+
 end;
 
 procedure TFRMWallet.FormDestroy(Sender: TObject);

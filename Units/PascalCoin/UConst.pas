@@ -36,19 +36,23 @@ Const
     'Bitcoin Surges Across Latin America with Start of Trump Era - 20170201 - Interest in Bitcoin is surging in Latin America in a new era marked by strained relations with the US President Donald Trump.';
 
   CT_Zero_Block_Proof_of_work_in_Hexa =
-    {$IFDEF PRODUCTION}'00000023ADB1BF4BF24C4787B1F901E3A149EC6534879BF758F786BAAFE3BDC5'{$ELSE}{$IFDEF TESTNET}''{$ELSE}{$ENDIF}{$ENDIF};
+    {$IFDEF PRODUCTION}'0000000008B9D7F2CC4D4ED9E5DFB2620BEC9175128735A68D6279AB564EE7CE'{$ELSE}{$IFDEF TESTNET}''{$ELSE}{$ENDIF}{$ENDIF};
 
+  CT_LowRewardBlocks: UInt64 = 1500; // How many blocks should have the blockchain to begin normal emission
 
   CT_NetServer_Port = {$IFDEF PRODUCTION}14004{$ELSE}{$IFDEF TESTNET}4104{$ELSE}{$ENDIF}{$ENDIF};
   CT_JSONRPCMinerServer_Port = {$IFDEF PRODUCTION}14009{$ELSE}{$IFDEF TESTNET}4109{$ELSE}{$ENDIF}{$ENDIF};
   CT_JSONRPC_Port = {$IFDEF PRODUCTION}14003{$ELSE}{$IFDEF TESTNET}4103{$ELSE}{$ENDIF}{$ENDIF};
-  CT_AccountsPerBlock = 25;
+  CT_AccountsPerBlock = 5;
+  CT_AccountsPerBlock_OnLowReward = 20;
 
   CT_NewLineSecondsAvg: Cardinal = {$IFDEF PRODUCTION}300{$ELSE}{$IFDEF TESTNET}30{$ELSE}{$ENDIF}{$ENDIF};
     // 60*5=300 seconds -> 5 minutes avg
     //   -> 1 day = 86400 seconds -> 1 year = 31536000 seconds (aprox)
     //   Each year = 105120 new blocks (aprox)
     //   -> *5 accounts per block = 525600 new accounts each year (aprox)
+
+  CT_LowReward: UInt64 = 10000; // 1 coin per block before the low reward limit is hit
 
   CT_FirstReward: UInt64 = 10000000; // 4 decimals... First reward = 1000,0000
   CT_MinReward: UInt64 = 100000; // 4 decimals... Min reward = 1,0000
@@ -62,7 +66,7 @@ Const
   CT_MaxTransactionFee = 100000000;
   CT_MaxWalletAmount = 10000000000000;
   //
-  CT_MinCompactTarget: Cardinal = {$IFDEF PRODUCTION}$19000000{$ELSE}{$IFDEF TESTNET}$17000000{$ELSE}{$ENDIF}{$ENDIF}; // First compact target of block 0
+  CT_MinCompactTarget: Cardinal = {$IFDEF PRODUCTION}$23000000{$ELSE}{$IFDEF TESTNET}$17000000{$ELSE}{$ENDIF}{$ENDIF}; // First compact target of block 0
 
   CT_CalcNewTargetBlocksAverage: Cardinal = 100;
   CT_MaxAccount : Cardinal = $FFFFFFFF;
@@ -83,7 +87,7 @@ Const
   CT_BlockChain_Protocol_Version: Word = $0001; // Version 1
   CT_BlockChain_Protocol_Available: Word = $0001; // Build 1.4 Protocol available changed 0->1
 
-  CT_MagicNetIdentification = $e9a40c12;
+  CT_MagicNetIdentification = $e9a40c13;
 
   // Build 1.0.4 - introducing NetProtocol versioning:
   CT_NetProtocol_Version: Word = $0003;

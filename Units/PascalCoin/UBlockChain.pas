@@ -494,7 +494,7 @@ begin
       if Not Operations.SafeBoxTransaction.Commit(Operations.OperationBlock.account_key,
         Operations.OperationBlock.reward,
         Operations.OperationBlock.timestamp,Operations.OperationBlock.compact_target,
-        Operations.OperationBlock.proof_of_work,errors) then begin
+        Operations.OperationBlock.proof_of_work,errors, SafeBox.BlocksCount) then begin
         exit;
       end;
       newBlock := SafeBox.Block(SafeBox.BlocksCount-1);
@@ -767,13 +767,17 @@ end;
 class function TPCBank.GetRewardForNewLine(line_index: Cardinal): UInt64;
 Var n, i : Cardinal;
 begin
-  n := (line_index + 1) DIV CT_NewLineRewardDecrease;
-  Result := CT_FirstReward;
-  for i := 1 to n do begin
-    Result := Result DIV 2;
+  if (line_index <= CT_LowRewardBlocks) then begin
+    Result := CT_LowReward;
+  end else begin
+    n := (line_index + 1) DIV CT_NewLineRewardDecrease;
+    Result := CT_FirstReward;
+    for i := 1 to n do begin
+      Result := Result DIV 2;
+    end;
+    if (Result < CT_MinReward) then
+      Result := CT_MinReward;
   end;
-  if (Result < CT_MinReward) then
-    Result := CT_MinReward;
 end;
 
 function TPCBank.GetStorage: TStorage;

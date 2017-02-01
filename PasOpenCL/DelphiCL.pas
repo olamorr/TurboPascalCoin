@@ -26,7 +26,9 @@ interface
 uses
   CL,
   CL_GL,
+  {$IFNDEF UNIX}
   Windows,
+  {$ENDIF}
   SysUtils,
   dglOpenGL,
   CL_Platform;
@@ -2195,9 +2197,9 @@ begin
     props[3] := wglGetCurrentDC();//glXGetCurrentDisplay(),
   {$ENDIF}
   {$IFDEF LINUX}
-    props[1] := glXGetCurrentContext();
+    props[1] := LongWord(glXGetCurrentContext());
     props[2] := CL_GLX_DISPLAY_KHR;
-    props[3] := glXGetCurrentDisplay();
+    props[3] := LongWord(glXGetCurrentDisplayEXT());
   {$ENDIF}
   props[4] := 0;
 
@@ -2572,7 +2574,11 @@ var
   EndTime: TCL_ulong;
 {$ENDIF}
 begin
+  {$IFDEF LINUX}
+  FillByte(origin, SizeOf(origin), 0);
+  {$ELSE}
   ZeroMemory(@origin, SizeOf(origin));
+  {$ENDIF}
   region[0] := Image.Width;
   region[1] := Image.Height;
   region[2] := 1;// Image 2D
@@ -2611,7 +2617,11 @@ var
   EndTime: TCL_ulong;
 {$ENDIF}
 begin
+  {$IFDEF LINUX}
+  FillByte(origin, SizeOf(origin), 0);
+  {$ELSE}
   ZeroMemory(@origin, SizeOf(origin));
+  {$ENDIF}
   region[0] := Width;
   region[1] := Height;
   region[2] := 1;// Image 2D

@@ -1,10 +1,11 @@
 # Pascal Coin: P2P Cryptocurrency without need of historical operations.  
   
 Copyright (c) 2016 Albert Molina  
+Copyright (c) 2017 Olamorr
   
 THIS IS EXPERIMENTAL SOFTWARE. Use it for educational purposes only.  
   
-This software is a Node of the Pascal Coin P2P Cryptocurrency.  
+This software is a Node of the TurboPascal Coin P2P Cryptocurrency.  
 It can be used to Mine and Explore blocks and operations.  
   
 Distributed under the MIT software license, see the accompanying file  
@@ -20,7 +21,7 @@ https://github.com/PascalCoin/PascalCoin
   
 ## HOW TO COMPILE:  
   
-See instructions at GitHub Wiki: https://github.com/PascalCoin/PascalCoin/wiki
+See instructions at GitHub Wiki: https://github.com/olamorr/TurboPascalCoin
   
   
 Enjoy Pascal Coin!
@@ -28,11 +29,28 @@ Enjoy Pascal Coin!
 ## Donations  
   
 If you like it, consider a donation using BitCoin:
-16K3HCZRhFUtM8GdWRcfKeaa6KsuyxZaYk
+Original dev: 16K3HCZRhFUtM8GdWRcfKeaa6KsuyxZaYk
+TurboPascal dev: 14i7enJUUr3Zcw172PpRHzJEj3ZbJt2pmJ
 
-Also, consider a donation at PascalCoin development account: "0-10"
+Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 ## History:  
+
+### Build 1.4.3.0 - 2017-02-01
+
+- Changed emission, now has low start of 1 coin for the first 1500 blocks
+- Changed account emission, now we have 4 times more accounts for the first 1500 blocks so there's no begging of accounts
+- Changed network magic to break previous clients
+- Restarted the network
+
+### Build 1.4.2.0 - 2017-02-01
+
+- Changed emission to account for low decimal places
+- Changed account emission, now we have 5 times more accounts so there's no begging of accounts
+- Added configuration option for Network port on the daemon
+
+
+## Upstream:
 
 ### Build 1.4.2.0 - 2017-01-23
 

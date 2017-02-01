@@ -463,9 +463,9 @@ object FRMWallet: TFRMWallet
     Height = 459
     Top = 91
     Width = 865
-    ActivePage = tsMyAccounts
+    ActivePage = tsBlockChain
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 2
     OnChange = PageControlChange
     object tsMyAccounts: TTabSheet
@@ -947,22 +947,22 @@ object FRMWallet: TFRMWallet
         Left = 0
         Height = 41
         Top = 0
-        Width = 841
+        Width = 855
         Align = alTop
         ClientHeight = 41
-        ClientWidth = 841
+        ClientWidth = 855
         TabOrder = 0
         object Label9: TLabel
           Left = 11
           Height = 13
           Top = 10
-          Width = 102
+          Width = 121
           Caption = 'Filter by blocks range'
           ParentColor = False
         end
         object ebBlockChainBlockStart: TEdit
           Left = 125
-          Height = 21
+          Height = 30
           Top = 7
           Width = 57
           OnExit = ebBlockChainBlockStartExit
@@ -971,7 +971,7 @@ object FRMWallet: TFRMWallet
         end
         object ebBlockChainBlockEnd: TEdit
           Left = 185
-          Height = 21
+          Height = 30
           Top = 7
           Width = 57
           OnExit = ebBlockChainBlockStartExit
@@ -981,15 +981,17 @@ object FRMWallet: TFRMWallet
       end
       object dgBlockChainExplorer: TDrawGrid
         Left = 0
-        Height = 363
+        Height = 391
         Top = 41
-        Width = 841
+        Width = 855
         Align = alClient
         ExtendedSelect = False
         TabOrder = 1
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
+        OnBeforeSelection = dgBlockChainExplorerBeforeSelection
+        OnDblClick = dgBlockChainExplorerDblClick
       end
     end
     object tsOperations: TTabSheet

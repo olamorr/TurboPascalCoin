@@ -61,7 +61,7 @@ Type
 
   TBlockAccount = Record
     blockaccount : Cardinal;  // FIXED. Number in the BlockChain
-    accounts : Array[0..CT_AccountsPerBlock-1] of TAccount;
+    accounts : Array{[0..CT_AccountsPerBlock-1]} of TAccount;
     timestamp: Cardinal;      // FIXED: Same value that stored in BlockChain. Included here because I need it to calculate new target value
     block_hash: AnsiString;   // Calculated on every block change (on create and on accounts updated)
     // New Build 1.0.8 "target" stored in TBlockAccount to increase performance calculating network hash rate.
@@ -146,7 +146,7 @@ Type
     Procedure AccountKeyListAddAccounts(Const AccountKey : TAccountKey; accounts : Array of Cardinal);
     Procedure AccountKeyListRemoveAccount(Const AccountKey : TAccountKey; accounts : Array of Cardinal);
   protected
-    Function AddNew(Const accountkey: TAccountKey; reward: UInt64; timestamp: Cardinal; compact_target: Cardinal; Const proof_of_work: AnsiString) : TBlockAccount;
+    Function AddNew(Const accountkey: TAccountKey; reward: UInt64; timestamp: Cardinal; compact_target: Cardinal; Const proof_of_work: AnsiString; blockCount: Cardinal) : TBlockAccount;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -199,7 +199,7 @@ Type
     Destructor Destroy; override;
     Function TransferAmount(sender,target : Cardinal; n_operation : Cardinal; amount, fee : UInt64; var errors : AnsiString) : Boolean;
     Function UpdateAccountkey(account_number, n_operation: Cardinal; accountkey: TAccountKey; fee: UInt64; var errors : AnsiString) : Boolean;
-    Function Commit(accountkey: TAccountKey; reward: UInt64; timestamp: Cardinal; compact_target: Cardinal; proof_of_work: AnsiString; var errors : AnsiString) : Boolean;
+    Function Commit(accountkey: TAccountKey; reward: UInt64; timestamp: Cardinal; compact_target: Cardinal; proof_of_work: AnsiString; var errors : AnsiString; blockCount: Cardinal) : Boolean;
     Function Account(account_number : Cardinal) : TAccount;
     Procedure Rollback;
     Function CheckIntegrity : Boolean;
@@ -222,33 +222,7 @@ Const
   CT_Account_NUL : TAccount = (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0);
   CT_BlockAccount_NUL : TBlockAccount = (
     blockaccount:0;
-    accounts:(
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0),
-    (account:0;accountkey:(EC_OpenSSL_NID:0;x:'';y:'');balance:0;updated_block:0;n_operation:0;previous_updated_block:0)
-    );
+    accounts:nil;
     timestamp:0;
     block_hash:'';
     target:0;);
@@ -639,14 +613,24 @@ begin
 end;
 
 function TPCSafeBox.AddNew(const accountkey: TAccountKey; reward: UInt64;
-  timestamp: Cardinal; compact_target: Cardinal; const proof_of_work: AnsiString
+  timestamp: Cardinal; compact_target: Cardinal; const proof_of_work: AnsiString;
+  blockCount: Cardinal
   ): TBlockAccount;
 var i, base_addr : Integer;
   P : PBlockAccount;
   accs : Array of cardinal;
+  accountsPerBlock: Integer;
 begin
-  base_addr := BlocksCount * CT_AccountsPerBlock;
+  if (blockCount <= CT_LowRewardBlocks) then begin
+    accountsPerBlock := CT_AccountsPerBlock_OnLowReward;
+  end else begin
+    accountsPerBlock := CT_AccountsPerBlock;
+  end;
+  base_addr := BlocksCount * accountsPerBlock;
+
   Result := CT_BlockAccount_NUL;
+  SetLength(Result.accounts, accountsPerBlock);
+
   Result.blockaccount := BlocksCount;
   setlength(accs,length(Result.accounts));
   for i := Low(Result.accounts) to High(Result.accounts) do begin
@@ -1074,7 +1058,7 @@ begin
   FTotalFee := 0;
 end;
 
-function TPCSafeBoxTransaction.Commit(accountkey: TAccountKey; reward: UInt64; timestamp: Cardinal; compact_target: Cardinal; proof_of_work: AnsiString; var errors : AnsiString) : Boolean;
+function TPCSafeBoxTransaction.Commit(accountkey: TAccountKey; reward: UInt64; timestamp: Cardinal; compact_target: Cardinal; proof_of_work: AnsiString; var errors : AnsiString; blockCount: Cardinal) : Boolean;
 Var i,j : Integer;
   B : TBlockAccount;
   Pa : PAccount;
@@ -1101,7 +1085,7 @@ begin
     if (FFreezedAccounts.FTotalFee<>FTotalFee) then begin
       TLog.NewLog(lterror,ClassName,Format('Invalid integrity fee! StrongBox:%d Transaction:%d',[FFreezedAccounts.FTotalFee,FTotalFee]));
     end;
-    B := FFreezedAccounts.AddNew(accountkey,reward,timestamp,compact_target,proof_of_work);
+    B := FFreezedAccounts.AddNew(accountkey,reward,timestamp,compact_target,proof_of_work, blockCount);
     if (B.accounts[0].balance<>(reward + FTotalFee)) then begin
       TLog.NewLog(lterror,ClassName,Format('Invalid integrity reward! Account:%d Balance:%d  Reward:%d Fee:%d (Reward+Fee:%d)',
         [B.accounts[0].account,B.accounts[0].balance,reward,FTotalFee,reward+FTotalFee]));

@@ -129,6 +129,8 @@ Type
   End;
   TBlockChainDataArray = Array of TBlockChainData;
 
+  { TBlockChainGrid }
+
   TBlockChainGrid = Class(TComponent)
   private
     FBlockChainDataArray : TBlockChainDataArray;
@@ -153,6 +155,7 @@ Type
   public
     Constructor Create(AOwner : TComponent); override;
     Destructor Destroy; override;
+    function getRow(index: integer): TBlockChainData;
     Property DrawGrid : TDrawGrid read FDrawGrid write SetDrawGrid;
     Property Node : TNode read GetNode write SetNode;
     Procedure UpdateBlockChainGrid; virtual;
@@ -904,6 +907,12 @@ begin
   inherited;
 end;
 
+function TBlockChainGrid.getRow(index: integer): TBlockChainData;
+begin
+  if (index >= 0) and (index <= High(FBlockChainDataArray)) then
+    Result := FBlockChainDataArray[index];
+end;
+
 function TBlockChainGrid.GetNode: TNode;
 begin
   Result := FNodeNotifyEvents.Node;
@@ -951,7 +960,7 @@ begin
   end;
 end;
 
-procedure TBlockChainGrid.OnGridDrawCell(Sender: TObject; ACol, ARow: Integer;
+procedure TBlockChainGrid.OnGridDrawCell(Sender: TObject; ACol, ARow: Longint;
   Rect: TRect; State: TGridDrawState);
 Var s : String;
   bcd : TBlockChainData;

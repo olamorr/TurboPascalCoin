@@ -8,8 +8,9 @@
       <Unit0>
         <Filename Value="pascalcoin_daemon.pp"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <CursorPos X="14" Y="13"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -21,19 +22,16 @@
         <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
         <EditorIndex Value="1"/>
         <TopLine Value="15"/>
-        <CursorPos X="40" Y="35"/>
-        <UsageCount Value="10"/>
-        <Bookmarks Count="1">
-          <Item0 X="26" Y="193" ID="1"/>
-        </Bookmarks>
+        <CursorPos X="57" Y="29"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="Units\PascalCoin\UNetProtocol.pas"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="1362"/>
         <CursorPos X="18" Y="1384"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -43,10 +41,14 @@
       </Unit4>
       <Unit5>
         <Filename Value="Units\PascalCoin\UAccounts.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="266"/>
-        <CursorPos X="47" Y="280"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="625"/>
+        <CursorPos X="47" Y="642"/>
         <UsageCount Value="10"/>
+        <Bookmarks Count="1">
+          <Item0 X="10" Y="226" ID="1"/>
+        </Bookmarks>
+        <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="Units\PascalCoin\UThread.pas"/>
@@ -66,8 +68,8 @@
         <Filename Value="Units\PascalCoin\UConst.pas"/>
         <EditorIndex Value="3"/>
         <TopLine Value="31"/>
-        <CursorPos X="20" Y="42"/>
-        <UsageCount Value="10"/>
+        <CursorPos X="25" Y="44"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
@@ -100,11 +102,10 @@
       </Unit12>
       <Unit13>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="506"/>
-        <CursorPos X="75" Y="526"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="33"/>
+        <CursorPos X="18" Y="66"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit13>
       <Unit14>
@@ -123,125 +124,121 @@
         <UsageCount Value="10"/>
       </Unit15>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
-        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="16" Column="20" TopLine="9"/>
+        <Filename Value="Units\PascalCoin\UNode.pas"/>
+        <Caret Line="46" Column="28" TopLine="22"/>
       </Position1>
       <Position2>
-        <Filename Value="Units\PascalCoin\UNetProtocol.pas"/>
-        <Caret Line="1386" Column="36" TopLine="1374"/>
+        <Filename Value="Units\PascalCoin\UNode.pas"/>
+        <Caret Line="62" Column="36" TopLine="38"/>
       </Position2>
       <Position3>
         <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="22" Column="35"/>
+        <Caret Line="10" Column="24"/>
       </Position3>
       <Position4>
-        <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="11" Column="26"/>
+        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
+        <Caret Line="87" Column="16" TopLine="63"/>
       </Position4>
       <Position5>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="46" Column="28" TopLine="22"/>
+        <Caret Line="59" Column="61" TopLine="46"/>
       </Position5>
       <Position6>
-        <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="62" Column="36" TopLine="38"/>
-      </Position6>
-      <Position7>
-        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="10" Column="24"/>
-      </Position7>
-      <Position8>
-        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="87" Column="16" TopLine="63"/>
-      </Position8>
-      <Position9>
-        <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="59" Column="61" TopLine="46"/>
-      </Position9>
-      <Position10>
         <Filename Value="Units\PascalCoin\UNetProtocol.pas"/>
         <Caret Line="2963" Column="31" TopLine="2956"/>
-      </Position10>
-      <Position11>
+      </Position6>
+      <Position7>
         <Filename Value="Units\PascalCoin\UNetProtocol.pas"/>
-      </Position11>
-      <Position12>
+      </Position7>
+      <Position8>
         <Filename Value="Units\PascalCoin\UNetProtocol.pas"/>
         <Caret Line="339" Column="17" TopLine="325"/>
-      </Position12>
-      <Position13>
+      </Position8>
+      <Position9>
         <Filename Value="Units\PascalCoin\UNetProtocol.pas"/>
         <Caret Line="4" Column="23"/>
-      </Position13>
-      <Position14>
+      </Position9>
+      <Position10>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
         <Caret Line="56" Column="41" TopLine="43"/>
+      </Position10>
+      <Position11>
+        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
+        <Caret Line="201" Column="56" TopLine="187"/>
+      </Position11>
+      <Position12>
+        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
+      </Position12>
+      <Position13>
+        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
+        <Caret Line="29" Column="24" TopLine="5"/>
+      </Position13>
+      <Position14>
+        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
+        <Caret Line="95" Column="81" TopLine="71"/>
       </Position14>
       <Position15>
         <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="201" Column="56" TopLine="187"/>
+        <Caret Line="192" Column="91" TopLine="179"/>
       </Position15>
       <Position16>
-        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
+        <Filename Value="Units\PascalCoin\UNode.pas"/>
+        <Caret Line="519" Column="65" TopLine="517"/>
       </Position16>
       <Position17>
-        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="29" Column="24" TopLine="5"/>
+        <Filename Value="Units\PascalCoin\UNode.pas"/>
+        <Caret Line="338" Column="13" TopLine="324"/>
       </Position17>
       <Position18>
-        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="95" Column="81" TopLine="71"/>
+        <Filename Value="Units\PascalCoin\UNode.pas"/>
+        <Caret Line="618" Column="82" TopLine="604"/>
       </Position18>
       <Position19>
-        <Filename Value="Units\PascalCoin\upcdaemon.pas"/>
-        <Caret Line="192" Column="91" TopLine="179"/>
+        <Filename Value="Units\PascalCoin\UNode.pas"/>
+        <Caret Line="59" Column="17" TopLine="36"/>
       </Position19>
       <Position20>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="519" Column="65" TopLine="517"/>
+        <Caret Line="618" Column="82" TopLine="604"/>
       </Position20>
       <Position21>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="338" Column="13" TopLine="324"/>
+        <Caret Line="838" Column="21" TopLine="824"/>
       </Position21>
       <Position22>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="618" Column="82" TopLine="604"/>
+        <Caret Line="338" Column="26" TopLine="324"/>
       </Position22>
       <Position23>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="59" Column="17" TopLine="36"/>
+        <Caret Line="838" Column="27" TopLine="824"/>
       </Position23>
       <Position24>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="618" Column="82" TopLine="604"/>
+        <Caret Line="58" Column="17" TopLine="42"/>
       </Position24>
       <Position25>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="838" Column="21" TopLine="824"/>
+        <Caret Line="528" Column="70" TopLine="519"/>
       </Position25>
       <Position26>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="338" Column="26" TopLine="324"/>
+        <Caret Line="50" TopLine="35"/>
       </Position26>
       <Position27>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="838" Column="27" TopLine="824"/>
+        <Caret Line="526" Column="75" TopLine="506"/>
       </Position27>
       <Position28>
         <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="58" Column="17" TopLine="42"/>
+        <Caret Line="60" Column="20" TopLine="44"/>
       </Position28>
       <Position29>
-        <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="528" Column="70" TopLine="519"/>
+        <Filename Value="Units\PascalCoin\UAccounts.pas"/>
+        <Caret Line="280" Column="47" TopLine="266"/>
       </Position29>
-      <Position30>
-        <Filename Value="Units\PascalCoin\UNode.pas"/>
-        <Caret Line="50" TopLine="35"/>
-      </Position30>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

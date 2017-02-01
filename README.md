@@ -38,6 +38,13 @@ Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 ## History:  
 
+### Build 1.4.3.0 - 2017-02-01
+
+- Changed emission, now has low start of 1 coin for the first 1500 blocks
+- Changed account emission, now we have 4 times more accounts for the first 1500 blocks so there's no begging of accounts
+- Changed network magic to break previous clients
+- Restarted the network
+
 ### Build 1.4.2.0 - 2017-02-01
 
 - Changed emission to account for low decimal places
