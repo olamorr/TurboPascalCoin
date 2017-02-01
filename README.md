@@ -5,7 +5,7 @@ Copyright (c) 2017 Olamorr
   
 THIS IS EXPERIMENTAL SOFTWARE. Use it for educational purposes only.  
   
-This software is a Node of the Pascal Coin P2P Cryptocurrency.  
+This software is a Node of the TurboPascalCoin P2P Cryptocurrency.  
 It can be used to Mine and Explore blocks and operations.  
   
 Distributed under the MIT software license, see the accompanying file  
@@ -52,7 +52,7 @@ Also, consider a donation at TurboPascalCoin development account: "0-10"
 - Max JSON-RPC miner connections is now 1000 (before, 10)
 - JSON-RPC miner enabled at pascalcoin_daemon (linux daemon)
 - Screen messages for daemon
-- pascalcoin_daemon.ini file for daemon
+- turbopascalcoin_daemon.ini file for daemon
 
 ### Build 1.4.1.0 - 2017-01-18
 
