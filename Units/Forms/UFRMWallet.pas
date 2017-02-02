@@ -366,6 +366,7 @@ begin
     TNetData.NetData.OnNodeServersUpdated := OnNetNodeServersUpdated;
     TNetData.NetData.OnBlackListUpdated := OnNetBlackListUpdated;
     //
+    TimerUpdateStatus.Interval := 5000;
     TimerUpdateStatus.Enabled := true;
     UpdateConfigChanged;
   Except
@@ -389,6 +390,7 @@ begin
   {$IFnDEF FPC}
   Hide();
   WindowState := wsMinimized;
+  TimerUpdateStatus.Enabled := false;
   { Show the animated tray icon and also a hint balloon. }
   TrayIcon.Visible := True;
   TrayIcon.ShowBalloonHint;
@@ -1523,6 +1525,7 @@ end;
 procedure TFRMWallet.TrayIconDblClick(Sender: TObject);
 begin
   TrayIcon.Visible := False;
+  TimerUpdateStatus.Enabled := true;
   Show();
   WindowState := wsNormal;
   Application.BringToFront();
