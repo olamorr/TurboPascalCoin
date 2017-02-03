@@ -203,8 +203,8 @@ begin
     errors := 'Invalid Payload size:'+inttostr(length(FData.payload))+' (Max: '+inttostr(CT_MaxPayloadSize)+')';
   end;
 
-  sender := AccountTransaction.Account(FData.sender);
-  target := AccountTransaction.Account(FData.target);
+  sender := AccountTransaction.Account(FData.sender, AccountTransaction.FreezedSafeBox.BlocksCount);
+  target := AccountTransaction.Account(FData.target, AccountTransaction.FreezedSafeBox.BlocksCount);
   if ((sender.n_operation+1)<>FData.n_operation) then begin
     errors := Format('Invalid n_operation %d (expected %d)',[FData.n_operation,sender.n_operation+1]);
     Exit;
@@ -419,7 +419,7 @@ begin
     errors := 'Invalid fee: '+Inttostr(FData.fee);
     exit;
   end;
-  account := AccountTransaction.Account(FData.account);
+  account := AccountTransaction.Account(FData.account, AccountTransaction.FreezedSafeBox.BlocksCount);
   if ((account.n_operation+1)<>FData.n_operation) then begin
     errors := 'Invalid n_operation';
     Exit;
@@ -613,7 +613,7 @@ begin
     errors := 'account is blocked for protocol';
     Exit;
   end;
-  acc := AccountTransaction.Account(FData.account);
+  acc := AccountTransaction.Account(FData.account, AccountTransaction.FreezedSafeBox.BlocksCount);
   if (acc.updated_block + CT_RecoverFoundsWaitInactiveCount >= AccountTransaction.FreezedSafeBox.BlocksCount) then begin
     errors := Format('Account is active to recover founds! Account %d Updated %d + %d >= BlockCount : %d',[FData.account,acc.updated_block,CT_RecoverFoundsWaitInactiveCount,AccountTransaction.FreezedSafeBox.BlocksCount]);
     Exit;

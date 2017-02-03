@@ -163,7 +163,7 @@ begin
     operation_to_string := '';
     for iAcc := 0 to FSenderAccounts.Count - 1 do begin
       op := Nil;
-      account := FNode.Operations.SafeBoxTransaction.Account(FSenderAccounts.Get(iAcc));
+      account := FNode.Operations.SafeBoxTransaction.Account(FSenderAccounts.Get(iAcc), FNode.Bank.BlocksCount);
       If Not UpdatePayload(account, errors) then
         raise Exception.Create('Error encoding payload of sender account '+TAccountComp.AccountNumberToAccountTxtNumber(account.account)+': '+errors);
       i := WalletKeys.IndexOfAccountKey(account.accountkey);
@@ -441,7 +441,7 @@ procedure TFRMOperation.memoPayloadClick(Sender: TObject);
 Var errors : AnsiString;
 begin
   if SenderAccounts.Count>0 then begin
-    UpdatePayload(TNode.Node.Bank.SafeBox.Account(SenderAccounts.Get(0)),errors);
+    UpdatePayload(TNode.Node.Bank.SafeBox.Account(SenderAccounts.Get(0), TNode.Node.Bank.BlocksCount),errors);
   end;
 end;
 
@@ -521,7 +521,7 @@ begin
       ebSenderAccount.Text := TAccountComp.AccountNumberToAccountTxtNumber(SenderAccounts.Get(0));
       memoAccounts.Visible := false;
       ebSenderAccount.Visible := true;
-      balance := TNode.Node.Operations.SafeBoxTransaction.Account(SenderAccounts.Get(0)).balance;
+      balance := TNode.Node.Operations.SafeBoxTransaction.Account(SenderAccounts.Get(0), TNode.Node.Bank.BlocksCount).balance;
     end else begin
       // Multiple sender accounts
       lblAccountCaption.Caption := 'Accounts';
@@ -529,7 +529,7 @@ begin
       ebSenderAccount.Visible := false;
       accountstext := '';
       for i := 0 to SenderAccounts.Count - 1 do begin
-         acc := TNode.Node.Operations.SafeBoxTransaction.Account(SenderAccounts.Get(i));
+         acc := TNode.Node.Operations.SafeBoxTransaction.Account(SenderAccounts.Get(i), TNode.Node.Bank.BlocksCount);
          balance := balance + acc.balance;
          if (accountstext<>'') then accountstext:=accountstext+'; ';
          accountstext := accountstext+TAccountComp.AccountNumberToAccountTxtNumber(acc.account)+' ('+TAccountComp.FormatMoney(acc.balance)+')';
@@ -575,7 +575,7 @@ begin
         exit;
       end else begin
         for iAcc := 0 to SenderAccounts.Count - 1 do begin
-          sender_account := TNode.Node.Bank.SafeBox.Account(SenderAccounts.Get(iAcc));
+          sender_account := TNode.Node.Bank.SafeBox.Account(SenderAccounts.Get(iAcc), TNode.Node.Bank.BlocksCount);
           iWallet := WalletKeys.IndexOfAccountKey(sender_account.accountkey);
           if (iWallet<0) then begin
             errors := 'Private key of account '+TAccountComp.AccountNumberToAccountTxtNumber(sender_account.account)+' not found in wallet';
@@ -739,7 +739,7 @@ begin
     end;
     if (rbEncryptedWithOldEC.Checked) then begin
       errors := 'Error encrypting';
-      account := FNode.Node.Operations.SafeBoxTransaction.Account(SenderAccount.account);
+      account := FNode.Node.Operations.SafeBoxTransaction.Account(SenderAccount.account, FNode.Bank.BlocksCount);
       payload_encrypted := ECIESEncrypt(account.accountkey,payload_u);
       valid := payload_encrypted<>'';
     end else if (rbEncryptedWithEC.Checked) then begin
@@ -750,7 +750,7 @@ begin
           errors := 'Invalid dest account number';
           exit;
         end;
-        account := FNode.Node.Operations.SafeBoxTransaction.Account(dest_account_number);
+        account := FNode.Node.Operations.SafeBoxTransaction.Account(dest_account_number, FNode.Bank.BlocksCount);
         payload_encrypted := ECIESEncrypt(account.accountkey,payload_u);
         valid := payload_encrypted<>'';
       end else if rbChangeKey.Checked then begin
