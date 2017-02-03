@@ -1,0 +1,21 @@
+The contract Lua VM should have a very restricted environment with a few ops.
+
+ - registerIntent: a function meant to communicate with the coin about future intents.
+   * Available intents:
+     + Receive: Get events of receiving funds
+     + Send: Send funds to another accounts (can be '*' to denote any account that has interacted with the contract)
+     + WritePermission: Name the contracts that are allowed to write to this one's data store
+     + LoadData: Load values from the key/value store
+     + SaveData: Save values to the local key/value store
+     + SaveRemoteData: Save values to a remote contract, if it has allowed so. Silently ignored if not.
+     + LoadRemoteData: Load values from a remote contract. This is permissionless.
+
+ - sendFunds: send funds to account, can be '*' to distribute funds among all interacting accounts (weigthed).
+ - function receiveFunds: callback for when the contract receives funds from any account
+ - function remoteWrite: callback when a remote contract writes to our store.
+ - loadData: loads data from the local (to the contract) key/value store.
+ - saveData: saves data to the local (to the contract) key/value store.
+ - saveRemoteData: saves data to a remote contract, only if it has allowed so from us. All data saved gets prepended with the local contract's name.
+ - loadRemoteData: load data from a remote contract's key/value store. Permissionless.
+
+The JSON-RPC interface should also expose a mechanism to read contract data, so we can interface them with web services.
