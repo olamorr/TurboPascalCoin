@@ -1,13 +1,13 @@
 # TurboPascal Coin: P2P Cryptocurrency without need of historical operations.  
-  
+
 Copyright (c) 2016 Albert Molina  
 Copyright (c) 2017 Olamorr
-  
+
 THIS IS EXPERIMENTAL SOFTWARE. Use it for educational purposes only.  
-  
+
 This software is a Node of the TurboPascalCoin P2P Cryptocurrency.  
 It can be used to Mine and Explore blocks and operations.  
-  
+
 Distributed under the MIT software license, see the accompanying file  
 LICENSE  or visit http://www.opensource.org/licenses/mit-license.php.  
 
@@ -17,19 +17,19 @@ cryptographic functions inspirated in code written by Ladar Levison and
 Marco Ferrante.  
 Original source code is written in Pascal Language and is available at   
 https://github.com/olamorr/TurboPascalCoin  
-  
-  
+
+
 ## HOW TO COMPILE:  
-  
-Use Lazarus 1.6 for linux. Delphi 7 for windows.
+
+Use Lazarus 1.6 for linux & windows.
 
 Open project and build all.
-  
-  
+
+
 Enjoy TurboPascal Coin!
-  
+
 ## Donations  
-  
+
 If you like it, consider a donation using BitCoin:
 Original dev: 16K3HCZRhFUtM8GdWRcfKeaa6KsuyxZaYk
 TurboPascal dev: 14i7enJUUr3Zcw172PpRHzJEj3ZbJt2pmJ
@@ -182,7 +182,7 @@ Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 ### Build 1.0.3.0 - 2016-09-08
 
-- Important changes to database 
+- Important changes to database
 - Peer cache
 - Issues with Connections
 - More stable
