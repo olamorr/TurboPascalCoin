@@ -38,7 +38,10 @@ Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 ## History:  
 
-### Buil 1.4.4.0 - 2017-02-03
+### Build 1.4.5 - 2017-02-03
+- Fixed the invalid account number error (for real)
+
+### Build 1.4.4.0 - 2017-02-03
 - Fixed the invalid account number error
 - Changed the project's icon to the official one
 

@@ -838,7 +838,8 @@ begin
               OPR.valid := true;
               OPR.Block := bend;
               OPR.time := opc.OperationBlock.timestamp;
-              OPR.AffectedAccount := bend * CT_AccountsPerBlock;
+
+              OPR.AffectedAccount := totalAccountsTillBlock(bend);
               OPR.Amount := opc.OperationBlock.reward;
               OPR.Fee := opc.OperationBlock.fee;
               OPR.Balance := OPR.Amount+OPR.Fee;

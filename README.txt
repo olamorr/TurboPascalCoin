@@ -36,6 +36,13 @@ Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 ## History:  
 
+### Build 1.4.5 - 2017-02-03
+- Fixed the invalid account number error (for real)
+
+### Build 1.4.4.0 - 2017-02-03
+- Fixed the invalid account number error
+- Changed the project's icon to the official one
+
 ### Build 1.4.3.0 - 2017-02-01
 
 - Changed emission, now has low start of 1 coin for the first 1500 blocks

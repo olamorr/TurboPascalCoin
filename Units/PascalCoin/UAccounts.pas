@@ -228,6 +228,7 @@ Const
     target:0;);
 
   function totalAccountsTillBlock(block_number: Cardinal): Cardinal;
+  procedure getAccountItemAndNumber(account_number, block_height: Cardinal; var b, p: Cardinal);
 
 implementation
 
@@ -239,7 +240,27 @@ begin
   if block_number <= CT_LowRewardBlocks then begin
     Result := block_number * CT_AccountsPerBlock_OnLowReward;
   end else begin
-    Result := (block_number - CT_LowRewardBlocks) * CT_AccountsPerBlock + CT_AccountsPerBlock_OnLowReward * CT_LowRewardBlocks;
+    Result := (block_number - CT_LowRewardBlocks) * CT_AccountsPerBlock_NormalReward + CT_AccountsPerBlock_OnLowReward * CT_LowRewardBlocks;
+  end;
+end;
+
+procedure getAccountItemAndNumber(account_number, block_height: Cardinal; var b, p: Cardinal);
+var
+  lowEmissionTotalAccounts: Cardinal;
+begin
+  if (block_height <= CT_LowRewardBlocks) then begin
+    b := account_number DIV CT_AccountsPerBlock_OnLowReward;
+    p := account_number MOD CT_AccountsPerBlock_OnLowReward;
+  end else begin
+    lowEmissionTotalAccounts := CT_AccountsPerBlock_OnLowReward * CT_LowRewardBlocks;
+
+    if (b <= lowEmissionTotalAccounts) then begin
+      b := account_number DIV CT_AccountsPerBlock_OnLowReward;
+      p := account_number MOD CT_AccountsPerBlock_OnLowReward;
+    end else begin
+      b := lowEmissionTotalAccounts + (account_number - lowEmissionTotalAccounts) DIV CT_AccountsPerBlock_NormalReward;
+      p := (account_number - lowEmissionTotalAccounts) MOD CT_AccountsPerBlock_NormalReward;
+    end;
   end;
 end;
 
@@ -308,8 +329,15 @@ end;
 
 
 class function TAccountComp.AccountBlock(const account_number: Cardinal): Cardinal;
+var
+  lowEmissionTotalAccounts: Cardinal;
 begin
-  Result := account_number DIV CT_AccountsPerBlock;
+  lowEmissionTotalAccounts := CT_AccountsPerBlock_OnLowReward * CT_LowRewardBlocks;
+  if (account_number > lowEmissionTotalAccounts) then begin
+    Result := (account_number - lowEmissionTotalAccounts) DIV CT_AccountsPerBlock_NormalReward + lowEmissionTotalAccounts;
+  end else begin
+    Result := account_number DIV CT_AccountsPerBlock_OnLowReward;
+  end;
 end;
 
 class function TAccountComp.AccountKey2RawString(account: TAccountKey): AnsiString;
@@ -538,7 +566,7 @@ class function TAccountComp.IsAccountBlockedByProtocol(account_number, blocks_co
 begin
   if blocks_count<CT_WaitNewBlocksBeforeTransaction then result := true
   else begin
-    Result := ((blocks_count-CT_WaitNewBlocksBeforeTransaction) * CT_AccountsPerBlock) <= account_number;
+    Result := totalAccountsTillBlock(blocks_count-CT_WaitNewBlocksBeforeTransaction) <= account_number;
   end;
 end;
 
@@ -617,10 +645,9 @@ end;
 
 function TPCSafeBox.Account(account_number, block_height: Cardinal): TAccount;
 var b, p : Cardinal;
-  accountEmission: Cardinal;
   lowEmissionTotalAccounts: Cardinal;
 begin
-  if (block_height <= CT_LowRewardBlocks) then begin
+  {if (block_height <= CT_LowRewardBlocks) then begin
     b := account_number DIV CT_AccountsPerBlock_OnLowReward;
     p := account_number MOD CT_AccountsPerBlock_OnLowReward;
   end else begin
@@ -630,10 +657,11 @@ begin
       b := account_number DIV CT_AccountsPerBlock_OnLowReward;
       p := account_number MOD CT_AccountsPerBlock_OnLowReward;
     end else begin
-      b := lowEmissionTotalAccounts + (account_number - lowEmissionTotalAccounts) DIV CT_AccountsPerBlock;
-      p := (account_number - lowEmissionTotalAccounts) MOD CT_AccountsPerBlock;
+      b := lowEmissionTotalAccounts + (account_number - lowEmissionTotalAccounts) DIV CT_AccountsPerBlock_NormalReward;
+      p := (account_number - lowEmissionTotalAccounts) MOD CT_AccountsPerBlock_NormalReward;
     end;
-  end;
+  end;}
+  getAccountItemAndNumber(account_number, block_height, b, p);
 
   if (b<0) Or (b>=FBlockAccountsList.Count) then raise Exception.Create('Invalid account: '+IntToStr(account_number));
   Result := PBlockAccount(FBlockAccountsList.Items[b])^.accounts[p];
@@ -651,7 +679,7 @@ begin
   if (blockCount <= CT_LowRewardBlocks) then begin
     accountsPerBlock := CT_AccountsPerBlock_OnLowReward;
   end else begin
-    accountsPerBlock := CT_AccountsPerBlock;
+    accountsPerBlock := CT_AccountsPerBlock_NormalReward;
   end;
   base_addr := BlocksCount * accountsPerBlock;
 
@@ -673,6 +701,7 @@ begin
     end;
     accs[i] := base_addr + i;
   end;
+  // TODO add vm procs here
   Result.timestamp := timestamp;
   Result.block_hash := CalcBlockHash(Result);
   Result.target := compact_target;
@@ -1027,13 +1056,16 @@ begin
 end;
 
 procedure TPCSafeBox.SetAccount(account_number : Cardinal; newAccountkey: TAccountKey; newBalance: UInt64; newN_operation: Cardinal);
-Var iBlock : Cardinal;
-  i,j,iAccount : Integer;
+Var iBlock, iAccount : Cardinal;
+  i,j : Integer;
   lastbalance : UInt64;
   P : PBlockAccount;
 begin
-  iBlock := account_number DIV CT_AccountsPerBlock;
-  iAccount := account_number MOD CT_AccountsPerBlock;
+  {iBlock := account_number DIV CT_AccountsPerBlock;
+  iAccount := account_number MOD CT_AccountsPerBlock;}
+
+  getAccountItemAndNumber(account_number, self.BlocksCount, iBlock, iAccount);
+
   P := FBlockAccountsList.Items[iBlock];
   if (NOT TAccountComp.Equal(P^.accounts[iAccount].accountkey,newAccountkey)) then begin
     AccountKeyListRemoveAccount(P^.accounts[iAccount].accountkey,[account_number]);

@@ -547,6 +547,7 @@ procedure TNode.GetStoredOperationsFromAccount(const OperationsResume: TOperatio
     OPR : TOperationResume;
     l : TList;
     i : Integer;
+    b,p: Cardinal;
     next_block_number : Cardinal;
   begin
     if (act_depth<=0) Or ((block_number<=0) And (block_number>0)) then exit;
@@ -577,7 +578,8 @@ procedure TNode.GetStoredOperationsFromAccount(const OperationsResume: TOperatio
           end;
         end;
         // Is a new block operation?
-        if (TAccountComp.AccountBlock(account_number)=block_number) And ((account_number MOD CT_AccountsPerBlock)=0) then begin
+        getAccountItemAndNumber(account_number, block_number, b, p);
+        if (TAccountComp.AccountBlock(account_number)=block_number) And (p=0) then begin
           OPR := CT_TOperationResume_NUL;
           OPR.valid := true;
           OPR.Block := block_number;
@@ -591,8 +593,9 @@ procedure TNode.GetStoredOperationsFromAccount(const OperationsResume: TOperatio
         end;
         //
         opc.Clear(true);
+
         if (next_block_number>=0) And (next_block_number<block_number) And (act_depth>0)
-           And (next_block_number >= (account_number DIV CT_AccountsPerBlock))
+           And (next_block_number >= b)
            And ((OperationsResume.Count<MaxOperations) Or (MaxOperations<=0))
            then DoGetFromBlock(next_block_number,last_balance,act_depth-1);
       finally
