@@ -246,7 +246,7 @@ begin
     else DrawGrid.RowCount := FAccountsList.Count+1;
     if Assigned(Node) then begin
       for i := 0 to FAccountsList.Count - 1 do begin
-        acc := Node.Bank.SafeBox.Account( FAccountsList.Get(i) );
+        acc := Node.Bank.SafeBox.Account( FAccountsList.Get(i), Node.Bank.BlocksCount);
         inc(FAccountsBalance, acc.balance);
       end;
     end;
@@ -419,7 +419,7 @@ begin
     n_acc := AccountNumber(ARow);
     if (n_acc>=0) then begin
       if (n_acc>=Node.Bank.AccountsCount) then account := CT_Account_NUL
-      else account := Node.Operations.SafeBoxTransaction.Account(n_acc);
+      else account := Node.Operations.SafeBoxTransaction.Account(n_acc, Node.Bank.BlocksCount);
       ndiff := Node.Bank.BlocksCount - account.updated_block;
       if (gdSelected in State) then
         If (gdFocused in State) then DrawGrid.Canvas.Brush.Color := clGradientActiveCaption
@@ -811,7 +811,7 @@ begin
         If TPCOperation.OperationToOperationResume(0,Op,Op.SenderAccount,OPR) then begin
           OPR.NOpInsideBlock := i;
           OPR.Block := Node.Operations.OperationBlock.block;
-          OPR.Balance := Node.Operations.SafeBoxTransaction.Account(Op.SenderAccount).balance;
+          OPR.Balance := Node.Operations.SafeBoxTransaction.Account(Op.SenderAccount, Node.Bank.BlocksCount).balance;
           FOperationsResume.Add(OPR);
         end;
       end;
@@ -869,7 +869,7 @@ begin
             If TPCOperation.OperationToOperationResume(0,Op,AccountNumber,OPR) then begin
               OPR.NOpInsideBlock := i;
               OPR.Block := Node.Operations.OperationBlock.block;
-              OPR.Balance := Node.Operations.SafeBoxTransaction.Account(AccountNumber).balance;
+              OPR.Balance := Node.Operations.SafeBoxTransaction.Account(AccountNumber, Node.Bank.BlocksCount).balance;
               FOperationsResume.Add(OPR);
             end;
           end;

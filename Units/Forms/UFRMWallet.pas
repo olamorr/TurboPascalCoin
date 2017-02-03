@@ -1091,9 +1091,9 @@ begin
   if an64<0 then an := 0
   else an := an64;
   If an>=FNode.Bank.SafeBox.AccountsCount then exit;
-  start := FNode.Bank.SafeBox.Account(an);
+  start := FNode.Bank.SafeBox.Account(an, FNode.Bank.BlocksCount);
   while (an<FNode.Bank.SafeBox.AccountsCount)  do begin
-    if FNode.Bank.SafeBox.Account(an).balance>start.balance then break
+    if FNode.Bank.SafeBox.Account(an, FNode.Bank.BlocksCount).balance>start.balance then break
     else inc(an);
   end;
   if (an<FNode.Bank.SafeBox.AccountsCount) then FAccountsGrid.MoveRowToAccount(an)
@@ -1129,12 +1129,12 @@ begin
   if an64<0 then an := FNode.Bank.SafeBox.AccountsCount-1
   else an := an64;
   If an>=FNode.Bank.SafeBox.AccountsCount then exit;
-  start := FNode.Bank.SafeBox.Account(an);
+  start := FNode.Bank.SafeBox.Account(an, FNode.Bank.BlocksCount);
   while (an>0)  do begin
-    if FNode.Bank.SafeBox.Account(an).balance>start.balance then break
+    if FNode.Bank.SafeBox.Account(an, FNode.Bank.BlocksCount).balance>start.balance then break
     else dec(an);
   end;
-  if (FNode.Bank.SafeBox.Account(an).balance>start.balance) then FAccountsGrid.MoveRowToAccount(an)
+  if (FNode.Bank.SafeBox.Account(an, FNode.Bank.BlocksCount).balance>start.balance) then FAccountsGrid.MoveRowToAccount(an)
   else raise Exception.Create('Not found any account lower than '+TAccountComp.AccountNumberToAccountTxtNumber(start.account)+' with balance higher than '+
     TAccountComp.FormatMoney(start.balance));
 end;
@@ -1447,7 +1447,7 @@ begin
     ltarget := FSelectedAccountsGrid.LockAccountsList;
     Try
       for i := 0 to lsource.Count-1 do begin
-        if FWalletKeys.IndexOfAccountKey(FNode.Bank.SafeBox.Account(lsource.Get(i)).accountkey)<0 then raise Exception.Create(Format('You cannot operate with account %d because private key not found in your wallet',[lsource.Get(i)]));
+        if FWalletKeys.IndexOfAccountKey(FNode.Bank.SafeBox.Account(lsource.Get(i), FNode.Bank.BlocksCount).accountkey)<0 then raise Exception.Create(Format('You cannot operate with account %d because private key not found in your wallet',[lsource.Get(i)]));
         ltarget.Add(lsource.Get(i));
       end;
     Finally
@@ -1464,7 +1464,7 @@ Var l : TOrderedCardinalList;
 begin
   an := FAccountsGrid.AccountNumber(dgAccounts.Row);
   if (an<0) then raise Exception.Create('No account selected');
-  if FWalletKeys.IndexOfAccountKey(FNode.Bank.SafeBox.Account(an).accountkey)<0 then
+  if FWalletKeys.IndexOfAccountKey(FNode.Bank.SafeBox.Account(an, FNode.Bank.BlocksCount).accountkey)<0 then
     raise Exception.Create(Format('You cannot add %s account because private key not found in your wallet.'#10+#10+'You''re not the owner!',
       [TAccountComp.AccountNumberToAccountTxtNumber(an)]));
   // Add
@@ -1560,7 +1560,7 @@ begin
               l := FOrderedAccountsKeyList.AccountKeyList[j];
               for k := 0 to l.Count - 1 do begin
                 if applyfilter then begin
-                  acc := FNode.Bank.SafeBox.Account(l.Get(k));
+                  acc := FNode.Bank.SafeBox.Account(l.Get(k), FNode.Bank.BlocksCount);
                   if (acc.balance>=FMinAccountBalance) And (acc.balance<=FMaxAccountBalance) then accl.Add(acc.account);
                 end else accl.Add(l.Get(k));
               end;
@@ -1574,7 +1574,7 @@ begin
               l := FOrderedAccountsKeyList.AccountKeyList[j];
               for k := 0 to l.Count - 1 do begin
                 if applyfilter then begin
-                  acc := FNode.Bank.SafeBox.Account(l.Get(k));
+                  acc := FNode.Bank.SafeBox.Account(l.Get(k), FNode.Bank.BlocksCount);
                   if (acc.balance>=FMinAccountBalance) And (acc.balance<=FMaxAccountBalance) then accl.Add(acc.account);
                 end else accl.Add(l.Get(k));
               end;
@@ -1585,7 +1585,7 @@ begin
         // There is a filter... check every account...
         c := 0;
         while (c<FNode.Bank.SafeBox.AccountsCount) do begin
-          acc := FNode.Bank.SafeBox.Account(c);
+          acc := FNode.Bank.SafeBox.Account(c, FNode.Bank.BlocksCount);
           if (acc.balance>=FMinAccountBalance) And (acc.balance<=FMaxAccountBalance) then accl.Add(acc.account);
           inc(c);
         end;

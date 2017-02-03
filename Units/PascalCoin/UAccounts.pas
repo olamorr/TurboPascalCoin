@@ -159,7 +159,7 @@ Type
     Class Function LoadSafeBoxStreamHeader(Stream : TStream; var BlocksCount : Cardinal) : Boolean;
     Procedure SaveSafeBoxToAStream(Stream : TStream);
     Procedure Clear;
-    Function Account(account_number : Cardinal) : TAccount;
+    Function Account(account_number, block_height : Cardinal) : TAccount;
     Function Block(block_number : Cardinal) : TBlockAccount;
     Function CalcSafeBoxHash : TRawBytes;
     Function CalcBlockHashRateInKhs(block_number : Cardinal; Previous_blocks_average : Cardinal) : Int64;
@@ -192,7 +192,7 @@ Type
     FTotalBalance: Int64;
     FTotalFee: Int64;
     FOldSafeBoxHash : TRawBytes;
-    Function GetInternalAccount(account_number : Cardinal) : PAccount;
+    Function GetInternalAccount(account_number, block_height : Cardinal) : PAccount;
   protected
   public
     Constructor Create(SafeBox : TPCSafeBox);
@@ -200,7 +200,7 @@ Type
     Function TransferAmount(sender,target : Cardinal; n_operation : Cardinal; amount, fee : UInt64; var errors : AnsiString) : Boolean;
     Function UpdateAccountkey(account_number, n_operation: Cardinal; accountkey: TAccountKey; fee: UInt64; var errors : AnsiString) : Boolean;
     Function Commit(accountkey: TAccountKey; reward: UInt64; timestamp: Cardinal; compact_target: Cardinal; proof_of_work: AnsiString; var errors : AnsiString; blockCount: Cardinal) : Boolean;
-    Function Account(account_number : Cardinal) : TAccount;
+    Function Account(account_number, block_height : Cardinal) : TAccount;
     Procedure Rollback;
     Function CheckIntegrity : Boolean;
     Property FreezedSafeBox : TPCSafeBox read FFreezedAccounts;
@@ -227,10 +227,21 @@ Const
     block_hash:'';
     target:0;);
 
+  function totalAccountsTillBlock(block_number: Cardinal): Cardinal;
+
 implementation
 
 uses
   SysUtils, ULog, UOpenSSLdef, UOpenSSL, UThread;
+
+function totalAccountsTillBlock(block_number: Cardinal): Cardinal;
+begin
+  if block_number <= CT_LowRewardBlocks then begin
+    Result := block_number * CT_AccountsPerBlock_OnLowReward;
+  end else begin
+    Result := (block_number - CT_LowRewardBlocks) * CT_AccountsPerBlock + CT_AccountsPerBlock_OnLowReward * CT_LowRewardBlocks;
+  end;
+end;
 
 { TStreamOp }
 
@@ -604,12 +615,28 @@ end;
 
 { TPCSafeBox }
 
-function TPCSafeBox.Account(account_number: Cardinal): TAccount;
-var b : Cardinal;
+function TPCSafeBox.Account(account_number, block_height: Cardinal): TAccount;
+var b, p : Cardinal;
+  accountEmission: Cardinal;
+  lowEmissionTotalAccounts: Cardinal;
 begin
-  b := account_number DIV CT_AccountsPerBlock;
+  if (block_height <= CT_LowRewardBlocks) then begin
+    b := account_number DIV CT_AccountsPerBlock_OnLowReward;
+    p := account_number MOD CT_AccountsPerBlock_OnLowReward;
+  end else begin
+    lowEmissionTotalAccounts := CT_AccountsPerBlock_OnLowReward * CT_LowRewardBlocks;
+
+    if (b <= lowEmissionTotalAccounts) then begin
+      b := account_number DIV CT_AccountsPerBlock_OnLowReward;
+      p := account_number MOD CT_AccountsPerBlock_OnLowReward;
+    end else begin
+      b := lowEmissionTotalAccounts + (account_number - lowEmissionTotalAccounts) DIV CT_AccountsPerBlock;
+      p := (account_number - lowEmissionTotalAccounts) MOD CT_AccountsPerBlock;
+    end;
+  end;
+
   if (b<0) Or (b>=FBlockAccountsList.Count) then raise Exception.Create('Invalid account: '+IntToStr(account_number));
-  Result := PBlockAccount(FBlockAccountsList.Items[b])^.accounts[account_number MOD CT_AccountsPerBlock];
+  Result := PBlockAccount(FBlockAccountsList.Items[b])^.accounts[p];
 end;
 
 function TPCSafeBox.AddNew(const accountkey: TAccountKey; reward: UInt64;
@@ -679,7 +706,7 @@ end;
 
 function TPCSafeBox.AccountsCount: Integer;
 begin
-  Result := BlocksCount * CT_AccountsPerBlock;
+  Result := totalAccountsTillBlock(BlocksCount);
 end;
 
 function TPCSafeBox.Block(block_number: Cardinal): TBlockAccount;
@@ -1036,12 +1063,12 @@ end;
 
 { TPCSafeBoxTransaction }
 
-function TPCSafeBoxTransaction.Account(account_number: Cardinal): TAccount;
+function TPCSafeBoxTransaction.Account(account_number, block_height: Cardinal): TAccount;
 Var i :Integer;
 begin
   if FOrderedList.Find(account_number,i) then Result := PAccount(FOrderedList.FList[i])^
   else begin
-    Result := FreezedSafeBox.Account(account_number);
+    Result := FreezedSafeBox.Account(account_number, block_height);
   end;
 end;
 
@@ -1129,13 +1156,13 @@ begin
   inherited;
 end;
 
-function TPCSafeBoxTransaction.GetInternalAccount(account_number: Cardinal): PAccount;
+function TPCSafeBoxTransaction.GetInternalAccount(account_number, block_height: Cardinal): PAccount;
 Var i :Integer;
   P : PAccount;
 begin
   if FOrderedList.Find(account_number,i) then Result := PAccount(FOrderedList.FList[i])
   else begin
-    i := FOrderedList.Add( FreezedSafeBox.Account(account_number) );
+    i := FOrderedList.Add( FreezedSafeBox.Account(account_number, block_height) );
     Result := PAccount(FOrderedList.FList[i]);
   end;
 end;
@@ -1166,8 +1193,8 @@ begin
     errors := 'Invalid integrity in accounts transaction';
     exit;
   end;
-  if (sender<0) Or (sender>=(FFreezedAccounts.BlocksCount*CT_AccountsPerBlock)) Or
-     (target<0) Or (target>=(FFreezedAccounts.BlocksCount*CT_AccountsPerBlock)) then begin
+  if (sender<0) Or (sender>=(totalAccountsTillBlock(FFreezedAccounts.BlocksCount))) Or
+     (target<0) Or (target>=(totalAccountsTillBlock(FFreezedAccounts.BlocksCount))) then begin
      errors := 'Invalid sender or target on transfer';
      exit;
   end;
@@ -1179,8 +1206,8 @@ begin
     errors := 'Target account is blocked for protocol';
     Exit;
   end;
-  PaccSender := GetInternalAccount(sender);
-  PaccTarget := GetInternalAccount(target);
+  PaccSender := GetInternalAccount(sender, FFreezedAccounts.BlocksCount);
+  PaccTarget := GetInternalAccount(target, FFreezedAccounts.BlocksCount);
   if (PaccSender^.n_operation+1<>n_operation) then begin
     errors := 'Incorrect n_operation';
     Exit;
@@ -1216,7 +1243,7 @@ Var intAccount : Integer;
 begin
   Result := false;
   errors := '';
-  if (account_number<0) Or (account_number>=(FFreezedAccounts.BlocksCount*CT_AccountsPerBlock)) Then begin
+  if (account_number<0) Or (account_number>=(totalAccountsTillBlock(FFreezedAccounts.BlocksCount))) Then begin
      errors := 'Invalid account';
      exit;
   end;
@@ -1224,7 +1251,7 @@ begin
     errors := 'account is blocked for protocol';
     Exit;
   end;
-  P := GetInternalAccount(account_number);
+  P := GetInternalAccount(account_number, FFreezedAccounts.BlocksCount);
   if (P^.n_operation+1<>n_operation) then begin
     errors := 'Incorrect n_operation';
     Exit;
@@ -1340,7 +1367,7 @@ begin
     j := 0;
     if Assigned(FAccountList) then begin
       For i:=0 to FAccountList.AccountsCount-1 do begin
-        If TAccountComp.Equal(FAccountList.Account(i).accountkey,AccountKey) then begin
+        If TAccountComp.Equal(FAccountList.Account(i, FAccountList.BlocksCount).accountkey,AccountKey) then begin
           // Note: P^.accounts will be ascending ordered due to "for i:=0 to ..."
           P^.accounts_number.Add(i);
         end;
@@ -1408,7 +1435,7 @@ begin
     AccountList.FListOfOrderedAccountKeysList.Add(Self);
     if AutoAddAll then begin
       for i := 0 to AccountList.AccountsCount - 1 do begin
-        AddAccountKey(AccountList.Account(i).accountkey);
+        AddAccountKey(AccountList.Account(i, FAccountList.BlocksCount).accountkey);
       end;
     end;
   end;

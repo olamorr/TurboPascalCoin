@@ -543,7 +543,7 @@ function TRPCProcess.ProcessMethod(const method: String; params: TPCJSONObject;
           If TPCOperation.OperationToOperationResume(0,Op,AccountNumber,OPR) then begin
             OPR.NOpInsideBlock := i;
             OPR.Block := FNode.Operations.OperationBlock.block;
-            OPR.Balance := FNode.Operations.SafeBoxTransaction.Account(AccountNumber).balance;
+            OPR.Balance := FNode.Operations.SafeBoxTransaction.Account(AccountNumber, FNode.Bank.BlocksCount).balance;
             OperationsResume.Add(OPR);
           end;
         end;
@@ -664,8 +664,8 @@ function TRPCProcess.ProcessMethod(const method: String; params: TPCJSONObject;
       ErrorNum:=CT_RPC_ErrNum_InvalidAccount;
       Exit;
     end;
-    sacc := FNode.Operations.SafeBoxTransaction.Account(sender);
-    tacc := FNode.Operations.SafeBoxTransaction.Account(target);
+    sacc := FNode.Operations.SafeBoxTransaction.Account(sender, FNode.Bank.BlocksCount);
+    tacc := FNode.Operations.SafeBoxTransaction.Account(target, FNode.Bank.BlocksCount);
 
     opt := CreateOperationTransaction(sender,target,sacc.n_operation,amount,fee,sacc.accountkey,tacc.accountkey,RawPayload,Payload_method,EncodePwd);
     if opt=nil then exit;
@@ -775,7 +775,7 @@ function TRPCProcess.ProcessMethod(const method: String; params: TPCJSONObject;
       ErrorNum:=CT_RPC_ErrNum_InvalidAccount;
       Exit;
     end;
-    acc := FNode.Operations.SafeBoxTransaction.Account(account_number);
+    acc := FNode.Operations.SafeBoxTransaction.Account(account_number, FNode.Bank.BlocksCount);
 
     opck := CreateOperationChangeKey(account_number,acc.n_operation,acc.accountkey,new_pub_key,fee,RawPayload,Payload_method,EncodePwd);
     if not assigned(opck) then exit;
@@ -866,7 +866,7 @@ function TRPCProcess.ProcessMethod(const method: String; params: TPCJSONObject;
             ErrorNum:=CT_RPC_ErrNum_InvalidAccount;
             Exit;
           end;
-          acc := FNode.Operations.SafeBoxTransaction.Account(accountsnumber.Get(ian));
+          acc := FNode.Operations.SafeBoxTransaction.Account(accountsnumber.Get(ian), FNode.Bank.BlocksCount);
           opck := CreateOperationChangeKey(acc.account,acc.n_operation,acc.accountkey,new_pub_key,fee,RawPayload,Payload_method,EncodePwd);
           if not assigned(opck) then exit;
           try
@@ -1143,7 +1143,7 @@ begin
     // Returns JSON Object with account information based on BlockChain + Pending operations
     c := params.GetAsVariant('account').AsCardinal(CT_MaxAccount);
     if (c>=0) And (c<FNode.Bank.AccountsCount) then begin
-      account := FNode.Operations.SafeBoxTransaction.Account(c);
+      account := FNode.Operations.SafeBoxTransaction.Account(c, FNode.Bank.BlocksCount);
       FillAccountObject(account,GetResultObject);
       Result := True;
     end else begin
@@ -1170,7 +1170,7 @@ begin
       l := params.AsInteger('start',0);
       for j := 0 to ocl.Count - 1 do begin
         if (j>=l) then begin
-          account := FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j));
+          account := FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j), FNode.Bank.BlocksCount);
           FillAccountObject(account,jsonarr.GetAsObject(jsonarr.Count));
         end;
         if (k>0) And ((j+1)>=(k+l)) then break;
@@ -1184,7 +1184,7 @@ begin
         ocl := _RPCServer.WalletKeys.AccountsKeyList.AccountKeyList[i];
         for j := 0 to ocl.Count - 1 do begin
           if (c>=l) then begin
-            account := FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j));
+            account := FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j), FNode.Bank.BlocksCount);
             FillAccountObject(account,jsonarr.GetAsObject(jsonarr.Count));
           end;
           inc(c);
@@ -1236,7 +1236,7 @@ begin
       ocl := _RPCServer.WalletKeys.AccountsKeyList.AccountKeyList[i];
       account.balance := 0;
       for j := 0 to ocl.Count - 1 do begin
-        inc(account.balance, FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j)).balance );
+        inc(account.balance, FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j), FNode.Bank.BlocksCount).balance );
       end;
       jsonresponse.GetAsVariant('result').value := ToJSONCurrency(account.balance);
       Result := true;
@@ -1247,7 +1247,7 @@ begin
       for i:=0 to _RPCServer.WalletKeys.AccountsKeyList.Count-1 do begin
         ocl := _RPCServer.WalletKeys.AccountsKeyList.AccountKeyList[i];
         for j := 0 to ocl.Count - 1 do begin
-          inc(account.balance, FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j)).balance );
+          inc(account.balance, FNode.Operations.SafeBoxTransaction.Account(ocl.Get(j), FNode.Bank.BlocksCount).balance );
         end;
       end;
       jsonresponse.GetAsVariant('result').value := ToJSONCurrency(account.balance);
@@ -1423,7 +1423,7 @@ begin
         exit;
       end;
       opr.NOpInsideBlock:=i;
-      opr.Balance := FNode.Operations.SafeBoxTransaction.Account(FNode.Operations.Operation[i].SenderAccount).balance;
+      opr.Balance := FNode.Operations.SafeBoxTransaction.Account(FNode.Operations.Operation[i].SenderAccount, FNode.Bank.BlocksCount).balance;
       FillOperationResumeToJSONObject(opr,GetResultArray.GetAsObject( FNode.Operations.Count-1-i ));
     end;
     Result := true;

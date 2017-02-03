@@ -271,7 +271,7 @@ begin
           if Assigned(OperationsResult) then begin
             TPCOperation.OperationToOperationResume(0,ActOp,ActOp.SenderAccount,OPR);
             OPR.NOpInsideBlock:=FOperations.Count-1;
-            OPR.Balance := FOperations.SafeBoxTransaction.Account(ActOp.SenderAccount).balance;
+            OPR.Balance := FOperations.SafeBoxTransaction.Account(ActOp.SenderAccount, FOperations.bank.BlocksCount).balance;
             OperationsResult.Add(OPR);
           end;
         end else begin
@@ -607,7 +607,7 @@ Var acc : TAccount;
 begin
   if MaxDepth<0 then exit;
   if account_number>=Bank.SafeBox.AccountsCount then exit;
-  acc := Bank.SafeBox.Account(account_number);
+  acc := Bank.SafeBox.Account(account_number, acc.updated_block);
   if (acc.updated_block>0) Or (acc.account=0) then DoGetFromBlock(acc.updated_block,acc.balance,MaxDepth);
 end;
 
@@ -644,8 +644,8 @@ begin
       FOperations.Unlock;
     end;
     // block=0 and not found... start searching at block updated by account updated_block
-    block := Bank.SafeBox.Account(account).updated_block;
-    if Bank.SafeBox.Account(account).n_operation<n_operation then exit; // n_operation is greater than found in safebox
+    block := Bank.SafeBox.Account(account, Bank.BlocksCount).updated_block;
+    if Bank.SafeBox.Account(account, Bank.BlocksCount).n_operation<n_operation then exit; // n_operation is greater than found in safebox
   end;
   if (block=0) or (block>=Bank.BlocksCount) then exit;
   // Search in previous blocks
