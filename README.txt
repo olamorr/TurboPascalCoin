@@ -36,7 +36,6 @@ Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 ## History:  
 
-<<<<<<< HEAD
 ### Build 1.4.3.0 - 2017-02-01
 
 - Changed emission, now has low start of 1 coin for the first 1500 blocks
@@ -57,7 +56,6 @@ Also, consider a donation at TurboPascalCoin development account: "0-10"
 
 - Adding "maturation" param to "JSON Operation object", return null when operation is not included on a blockchain yet, 0 means that is included in highest block and so on...
 - Fixing miner timestamp value to prevent invalid time
->>>>>>> b7a72b6a491ff791db5ec58a7f30dcb95ff0e561
 
 ### Build 1.4.2.0 - 2017-01-23
 

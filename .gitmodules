@@ -1,0 +1,3 @@
+[submodule "Lua4Lazarus"]
+	path = Lua4Lazarus
+	url = https://github.com/malcome/Lua4Lazarus
